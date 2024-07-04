@@ -32,8 +32,11 @@ class BuildGradle {
     final artifacts = await provider.getArtifacts(targets);
 
     for (final target in targets) {
+      log.shout("########################### GRADLE TARGET: ${target.toString()}");
       final libs = artifacts[target]!;
+      log.shout("########################### GRADLE LIBS OR ARTIFACTS: \n${libs.map((a) => "${a.path}").join("\n")}");
       final outputDir = path.join(Environment.outputDir, target.android!);
+      log.shout("########################### GRADLE OUTPUT DIR: ${outputDir.toString()}");
       Directory(outputDir).createSync(recursive: true);
 
       for (final lib in libs) {

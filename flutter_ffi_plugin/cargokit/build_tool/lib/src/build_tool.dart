@@ -233,6 +233,9 @@ Future<void> runMain(List<String> args) async {
     // Init logging before options are loaded
     initLogging();
 
+    log.shout("################ STARTING CARGOKIT BUILD TOOL RUN MAIN");
+    log.shout("################ ENVIRONMENT:\n${Platform.environment.keys.map((key) => "key: $key, value: ${Platform.environment[key]}").join("\n")}");
+
     if (Platform.environment['_CARGOKIT_NDK_LINK_TARGET'] != null) {
       return AndroidEnvironment.clangLinkerWrapper(args);
     }

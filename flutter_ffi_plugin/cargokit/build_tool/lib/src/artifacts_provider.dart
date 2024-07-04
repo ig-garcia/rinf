@@ -52,9 +52,11 @@ class ArtifactProvider {
 
   Future<Map<Target, List<Artifact>>> getArtifacts(List<Target> targets) async {
     final result = await _getPrecompiledArtifacts(targets);
-
+    _log.shout("########################### PRECOMPILED ARTIFACTS: ${result.toString()}");
+    _log.shout("########################### TARGETS: ${targets.map((t) => "rust: ${t.rust}, android: ${t.android}")}");
     final pendingTargets = List.of(targets);
     pendingTargets.removeWhere((element) => result.containsKey(element));
+    _log.shout("########################### PENDING TARGETS: ${pendingTargets.map((t) => "rust: ${t.rust}, android: ${t.android}")}");
 
     if (pendingTargets.isEmpty) {
       return result;
@@ -66,6 +68,7 @@ class ArtifactProvider {
       builder.prepare(rustup);
       _log.info('Building ${environment.crateInfo.packageName} for $target');
       final targetDir = await builder.build();
+      _log.shout("########################### RUST TARGET DIR: $targetDir");
       // For local build accept both static and dynamic libraries.
       final artifactNames = <String>{
         ...getArtifactNames(
@@ -81,6 +84,7 @@ class ArtifactProvider {
           remote: false,
         )
       };
+      _log.shout("########################### RUST ARTIFACT NAMES: ${artifactNames.map((a) => a)}");
       final artifacts = artifactNames
           .map((artifactName) => Artifact(
                 path: path.join(targetDir, artifactName),
